@@ -31,10 +31,10 @@ public class GeomСalculations {
 //            System.out.println(way);
 //        }
         reading();
-
+        double[] dr = {0,0};
         afterTheCount1 = choiceoOfMethod(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees);
-        double dr = findingDR(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees, cornerSize);
-        double re = findingRE(afterTheCount1[0], afterTheCount1[4], dr, afterTheCount1[5], tiltAngleInDegrees);
+        dr = findingDR(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees, cornerSize); //dr,df
+        double re = findingRE(afterTheCount1[0], afterTheCount1[4], dr[0], afterTheCount1[5], tiltAngleInDegrees);
         way = re + afterTheCount1[6];
         System.out.println(way);
 
@@ -42,8 +42,10 @@ public class GeomСalculations {
         way = way + afterTheCount2[6];
         System.out.println(way);
 
-        dr = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);
-        way = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);
+        dr = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);//dr,df
+        double oq = findingMaxH(cornerSize,afterTheCount1[1]);
+        double RE = findingRE(afterTheCount1[1],oq,dr[0],(dr[1] - dr[0]),afterTheCount2[3]);
+        way = way + RE;
         System.out.println(way);
 
     }
@@ -232,10 +234,10 @@ public class GeomСalculations {
         return rsg;
     }
 
-    private double findingDR(double jr, double jo, double jrd, double tiltAngleInDegrees, double r) {
+    private double[] findingDR(double jr, double jo, double jrd, double tiltAngleInDegrees, double r) {
         double bj = 0;
         double ga = 0;
-        double dr = 0;
+        double[] dr = {0,0};
         double tanJBR = 0;
         double jrb = 0;
         double jra = 0;
@@ -246,7 +248,7 @@ public class GeomСalculations {
         ga = r - jr;
         jra = 270 - Math.toDegrees(Math.atan(ga / jo));
         if (jrd < jrb) {
-            dr = jr / Math.cos(Math.toRadians(jrd));
+            dr[0] = jr / Math.cos(Math.toRadians(jrd));
         }
         if (jrd > jrb && jrd < jra) {
             double rbd = 0;
@@ -257,16 +259,16 @@ public class GeomСalculations {
             br = bj / Math.cos(Math.toRadians(jbr));
             brd = jrd - jrb;
             bdr = 180 - rbd - brd;
-            dr = br * (Math.sin(Math.toRadians(rbd)) / Math.sin(Math.toRadians(bdr)));
+            dr[0] = br * (Math.sin(Math.toRadians(rbd)) / Math.sin(Math.toRadians(bdr)));
         }
         if (jrd < jrb && 0 < jrb) {
             double br = 0;
-            dr = jr / Math.cos(Math.toRadians(jrd));
+            dr[0] = jr / Math.cos(Math.toRadians(jrd));
         }
         if (jrd > jra && 270 < jrd) {
             double grd = 0;
             grd = 270 - jrd;
-            dr = jo / Math.cos(Math.toRadians(tiltAngleInDegrees));
+            dr[0] = jo / Math.cos(Math.toRadians(tiltAngleInDegrees));
         }
         if (jrd > 270 && 361 >jrd) {
             double jro = 0;
@@ -283,11 +285,11 @@ public class GeomСalculations {
                 double dbf = 45;
                 double dfb = 180 - rdg - 45;
                 rdg = 90 - drg;
-                dr = jo / Math.sin(Math.toRadians(rdg));
+                dr[0] = jo / Math.sin(Math.toRadians(rdg));
                 dg = jo * (Math.sin(Math.toRadians(drg)) / Math.sin(Math.toRadians(rdg)));
                 od = jr - dg;
                 db = r - od;
-                dr = db * (Math.sin(Math.toRadians(dbf)) / Math.sin(Math.toRadians(dfb))); //(расчитывается df)
+                dr[1] = db * (Math.sin(Math.toRadians(dbf)) / Math.sin(Math.toRadians(dfb))); //(расчитывается df
             }
             if (jrd > jro && 361 > jrd) {
                 double drj = 0;
@@ -298,12 +300,12 @@ public class GeomСalculations {
                 double dfa = 0;
                 jdr = drg;
                 drj = 90 - drg;
-                dr = jr / Math.sin(Math.toRadians((90 - drj)));
-                jd = dr * (Math.sin(Math.toRadians(drj)) / Math.sin(Math.toRadians(90)));
+                dr[0] = jr / Math.sin(Math.toRadians((90 - drj)));
+                jd = dr[0] * (Math.sin(Math.toRadians(drj)) / Math.sin(Math.toRadians(90)));
                 DO = jo - jd;
                 ad = r - DO;
                 dfa = 180 - 45 - jdr;
-                dr = ad * (Math.sin(Math.toRadians(45)) / Math.sin(Math.toRadians(dfa)));//(расчитывается df)
+                dr[1] = ad * (Math.sin(Math.toRadians(45)) / Math.sin(Math.toRadians(dfa)));//(расчитывается df)
             }
         }
         return dr;
