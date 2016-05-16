@@ -27,28 +27,57 @@ public class GeomСalculations {
 
     public void start() {
         reading();
-        double[] dr = {0, 0};
-        afterTheCount1 = choiceoOfMethod(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees);
-        if (readiness == true) {
-            dr = findingDR(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees, cornerSize); //dr,df
-            double re = findingRE(afterTheCount1[1], afterTheCount1[4], dr[0], afterTheCount1[5], tiltAngleInDegrees);
-            way = re + afterTheCount1[6];
-            System.out.println(way);
-        }
-        if(readiness == true) {
-            afterTheCount2 = choiceoOfMethod(afterTheCount1[0], afterTheCount1[1], afterTheCount1[2], afterTheCount1[3]);
-            way = way + afterTheCount2[6];
-            System.out.println(way);
-        }
-        if (readiness == true) {
-            dr = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);//dr,df
-            double oq = findingMaxH(cornerSize, afterTheCount1[0]);
-            double RE = findingRE(afterTheCount1[1], oq, dr[0], (dr[1] - dr[0]), afterTheCount2[3]);
-            way = way + RE;
-            System.out.println(way);
-        }
-        System.out.println("/n");
-    }
+//        for (int xi = 1; xi < 50; xi++){
+//            for (int yi = 1; yi < 50; yi++) {
+//                coordinateX = xi;
+//                coordinateY = yi;
+//                rotationAngleInDegrees = 120;
+//                tiltAngleInDegrees = 60;
+//                cornerSize = 50;
+//                System.out.println(xi + " _" + yi + " _" + rotationAngleInDegrees + " _" + tiltAngleInDegrees);
+
+                double[] dr = {0, 0};
+                readiness = true;
+
+                afterTheCount1 = choiceoOfMethod(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees);
+                if (readiness == false){
+                    way = 0;
+                    System.out.println(way);
+                }
+                if (readiness == true) {
+                    dr = findingDR(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees, cornerSize); //dr,df
+                    double re = findingRE(afterTheCount1[1], afterTheCount1[4], dr[0], afterTheCount1[5], tiltAngleInDegrees);
+                    if(afterTheCount1[0] != 0){
+                        way = re + afterTheCount1[6];
+                        System.out.println(way);
+                    }
+                    else {
+                        way = re + afterTheCount1[6];
+                        System.out.println(way);
+                    }
+                }
+                if (readiness == true) {
+                    afterTheCount2 = choiceoOfMethod(afterTheCount1[0], afterTheCount1[1], afterTheCount1[2], afterTheCount1[3]);
+                    if(afterTheCount2[0] != 0) {
+                        way = way + afterTheCount2[6];
+                        System.out.println(way);
+                    }
+                    else {
+                        way = way + afterTheCount2[6];
+                        System.out.println(way);
+                    }
+                }
+                if (readiness == true) {
+                    dr = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);//dr,df
+                    double oq = findingMaxH(cornerSize, afterTheCount1[0]);
+                    double RE = findingRE(afterTheCount1[1], oq, dr[0], (dr[1] - dr[0]), afterTheCount2[3]);
+                    way = way + RE;
+                    System.out.println(way);
+                }
+                System.out.println("\n");
+            }
+    //    }
+    //}
 
     private double[] choiceoOfMethod(double x, double y, double rotationAngle, double tiltAngle) {
         double[] resultChoice = {0, 0, 0, 0, 0, 0, 0};
@@ -57,11 +86,11 @@ public class GeomСalculations {
             readiness = false;
         }
         if (90 == rotationAngle) {
-            way = _90180(cornerSize, y, tiltAngle);
+            resultChoice[6] = _90180(cornerSize, y, tiltAngle, x, rotationAngle);
             readiness = false;
         }
         if (180 == rotationAngle) {
-            resultChoice[0] = _90180(cornerSize, x, tiltAngle);
+            resultChoice[6] = _90180(cornerSize, y, tiltAngle, x, rotationAngle);
             readiness = false;
         }
         if (0 < rotationAngle && 90 > rotationAngle) {
@@ -120,13 +149,14 @@ public class GeomСalculations {
         double fr = 0;
         double tanGSF = 0;
         double angl = 0;
+        double maxh = 0;
         double gsf = 0;
         frg = 90 - jrd;
         fg = gr * Math.tan(Math.toRadians(frg));
         fo = fg + go; //return this is x, one of coordinats
         fr = gr / Math.cos(Math.toRadians(frg));
         resaultAfgo = srfUniversal(fr, tiltAngleInDegrees); //resault {0,FS,0,0,0,0,RS}
-        double maxh = findingMaxH(cornerSize, fo);
+        maxh = findingMaxH(cornerSize, fo);
         if (maxh > resaultAfgo[1]) {
             tanGSF = fg / resaultAfgo[1];
             gsf = Math.toDegrees(Math.atan(tanGSF));
@@ -140,8 +170,7 @@ public class GeomСalculations {
             return resaultAfgo;
         }
         else{
-            resaultAfgo[6] = 0;
-            readiness = false;
+            resaultAfgo[6] = elsee(go,gr,jrd,tiltAngleInDegrees,fr,maxh);
         }
         return resaultAfgo;
     }
@@ -173,8 +202,9 @@ public class GeomСalculations {
             return resaultAgfo;
         }
         else{
-            resaultAgfo[6] = 0;
-            readiness = false;
+
+                resaultAgfo[6] = elsee(go,gr,jrd,tiltAngleInDegrees,fr,maxh);
+
         }
         return resaultAgfo;// не обработано при 2х
     }
@@ -208,8 +238,7 @@ public class GeomСalculations {
             return resaultOfjb;
         }
         else{
-            resaultOfjb[6] = 0;
-            readiness = false;
+            resaultOfjb[6] = elsee(rj,oj,jrd,tiltAngleInDegrees,fr,maxh);
         }
         return resaultOfjb;
     }
@@ -243,28 +272,41 @@ public class GeomСalculations {
             return resaultOjfb;
         }
         else{
-            resaultOjfb[6] = 0;
-            readiness = false;
+            resaultOjfb[6] = elsee(rj,oj,jrd,tiltAngleInDegrees,fr,maxh);
         }
         return resaultOjfb;
     }
 
-    private double  _90180(double ao, double or, double ard) {
-        double ar = ao - or;
+    private double  _90180(double ao, double or, double ard, double x, double rotAng) {
+        double Ao = 0;
+        double X = 0;
+        if (rotAng == 90){
+            Ao = ao;
+            X = x;
+        }
+        if (rotAng == 180){
+            Ao = x;
+            X = ao;
+        }
+        double ar = Ao - or;
         double adr = 180 - 45 - ard;
-        double dr = (ao - or) * (Math.sin(Math.toRadians(45)) / Math.sin(Math.toRadians(adr)));
+        double dr = (Ao - or) * (Math.sin(Math.toRadians(45)) / Math.sin(Math.toRadians(adr)));
         double rs = or / Math.cos(Math.toRadians(ard));
         double maxHi = findingMaxH(cornerSize,or);
         double os = or * Math.tan(Math.toRadians(ard));
         double result;
         if (maxHi > os) {
-            double cs = ao - os;
+            double cs = Ao - os;
             double sce = 45 + ard;
             double se = cs * (Math.sin(Math.toRadians(45)) / Math.sin(Math.toRadians(sce)));
             result = dr + rs + se;
         }
         else {
-            result = 0;
+            double[] dR = findingDR(X, or, rotAng,ard,cornerSize);
+            double[] wayIn90 = {0,0};
+            wayIn90 = findingLR(maxHi, or, dR[0], ard);
+            result = wayIn90[0] + wayIn90[1];
+            readiness = false;
         }
         return result;
     }
@@ -368,6 +410,29 @@ public class GeomСalculations {
     private double findingMaxH(double r, double fo) {
         double h = r - fo;
         return h;
+    }
+
+    private double[] findingLR(double qf, double fr, double dr, double ird){
+        double[] lr = {0,0};
+        double fd = fr + dr;
+        double tanQDF = qf / fd;
+        double qdf = Math.toDegrees(Math.atan(tanQDF));
+        double rid = 180 - ird - qdf;
+        lr[1] = dr * (Math.sin(Math.toRadians(rid))/Math.sin(Math.toRadians(qdf))); //ir
+        double lir = 180 - rid;
+        double lri = 180 - (2 * ird);
+        double rli = 180 - lir - lri;
+        lr[0] = lr[1] * (Math.sin(Math.toRadians(rli))/Math.sin(Math.toRadians(lir)));
+        return lr;
+    }
+
+    private double elsee (double go,double gr,double jrd,double til, double fr, double maxh) {
+        double[] lR = {0, 0};
+        double[] dR = findingDR(go, gr, jrd, til, cornerSize);
+        lR = findingLR(maxh, fr, dR[0], til);
+        double res = lR[0];
+        readiness = false;
+        return  res;
     }
 }
 
