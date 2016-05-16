@@ -34,7 +34,7 @@ public class GeomСalculations {
         double[] dr = {0,0};
         afterTheCount1 = choiceoOfMethod(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees);
         dr = findingDR(coordinateX, coordinateY, rotationAngleInDegrees, tiltAngleInDegrees, cornerSize); //dr,df
-        double re = findingRE(afterTheCount1[0], afterTheCount1[4], dr[0], afterTheCount1[5], tiltAngleInDegrees);
+        double re = findingRE(afterTheCount1[1], afterTheCount1[4], dr[0], afterTheCount1[5], tiltAngleInDegrees);
         way = re + afterTheCount1[6];
         System.out.println(way);
 
@@ -43,7 +43,7 @@ public class GeomСalculations {
         System.out.println(way);
 
         dr = findingDR(afterTheCount2[0], afterTheCount2[1], afterTheCount2[2], afterTheCount2[3], cornerSize);//dr,df
-        double oq = findingMaxH(cornerSize,afterTheCount1[1]);
+        double oq = findingMaxH(cornerSize,afterTheCount1[0]);
         double RE = findingRE(afterTheCount1[1],oq,dr[0],(dr[1] - dr[0]),afterTheCount2[3]);
         way = way + RE;
         System.out.println(way);
@@ -56,7 +56,7 @@ public class GeomСalculations {
             way = way + 0;
         }
         if (0 < rotationAngle && 90 > rotationAngle) {
-            resultChoice = afgo(x, y, rotationAngle, tiltAngle); //{FS,FO,fsg,angl,maxh,fr,RS}
+            resultChoice = afgo(x, y, rotationAngle, tiltAngle); //{FO,FS,fsg,angl,maxh,fr,RS}
         }
         if (90 < rotationAngle && 180 > rotationAngle) {
             double tanORJ = 0;
@@ -64,14 +64,14 @@ public class GeomСalculations {
             tanORJ = y / x;
             jro = 360 - Math.toDegrees(Math.atan(tanORJ));
             if (jro > (180 + rotationAngle)) {
-                resultChoice = agfo(x, y, rotationAngle, tiltAngle); //{FS,FO,fsg,angl,maxh,fr,RS}
+                resultChoice = agfo(x, y, rotationAngle, tiltAngle); //{FO,FS,fsg,angl,maxh,fr,RS}
             }
             if (jro < (180 + rotationAngle)) {
-                resultChoice = ofjb(x, y, rotationAngle, tiltAngle); //{FS,FO,ksj,angl,maxh,fr,RS}
+                resultChoice = ofjb(x, y, rotationAngle, tiltAngle); //{FO,FS,fsg,angl,maxh,fr,RS}
             }
         }
         if (180 < rotationAngle && 270 > rotationAngle) {
-            resultChoice = ojfb(x, y, rotationAngle, tiltAngle); //{FS,FO,ksj,angl,maxh,fr,RS}
+            resultChoice = ojfb(x, y, rotationAngle, tiltAngle); //{FO,FS,fsg,angl,maxh,fr,RS
         }
         return resultChoice;
     }
@@ -97,7 +97,7 @@ public class GeomСalculations {
 
     private double[] srfUniversal(double fr, double srf) {
         double[] resaultU = {0, 0, 0, 0, 0, 0, 0};
-        resaultU[0] = fr * Math.tan(Math.toRadians(srf)); // return one of the coordinats fs
+        resaultU[1] = fr * Math.tan(Math.toRadians(srf)); // return one of the coordinats fs
         resaultU[6] = fr / Math.cos(Math.toRadians(srf));//rs
         return resaultU; //resault {FS,0,0,0,0,0,RS}
     }
@@ -116,14 +116,14 @@ public class GeomСalculations {
         fg = gr * Math.tan(Math.toRadians(frg));
         fo = fg + go; //return this is x, one of coordinats
         fr = gr / Math.cos(Math.toRadians(frg));
-        resaultAfgo = srfUniversal(fr, tiltAngleInDegrees); //resault {FS,0,0,0,0,0,RS}
+        resaultAfgo = srfUniversal(fr, tiltAngleInDegrees); //resault {0,FS,0,0,0,0,RS}
         double maxh = findingMaxH(cornerSize, fo);
-        if (maxh > resaultAfgo[0]) {
-            tanGSF = fg / resaultAfgo[0];
+        if (maxh > resaultAfgo[1]) {
+            tanGSF = fg / resaultAfgo[1];
             gsf = Math.toDegrees(Math.atan(tanGSF));
             fsg = 360 - gsf; // искомый угол поворота
             angl = tiltAngle(gsf, resaultAfgo[1], go);
-            resaultAfgo[1] = fo;
+            resaultAfgo[0] = fo;
             resaultAfgo[2] = fsg;
             resaultAfgo[3] = angl;
             resaultAfgo[4] = maxh;
@@ -147,12 +147,12 @@ public class GeomСalculations {
         fo = go - fg;//return this is x, one of coordinats
         double maxh = findingMaxH(cornerSize, fo);
         fr = gr / Math.cos(Math.toRadians(grf));
-        resaultAgfo = srfUniversal(fr, tiltAngleInDegrees);//resault {FS,0,0,0,0,0,RS}
-        if (maxh > resaultAgfo[0]) {
-            tanFSG = fg / resaultAgfo[0];
+        resaultAgfo = srfUniversal(fr, tiltAngleInDegrees);//resault {0,FS,0,0,0,0,RS}
+        if (maxh > resaultAgfo[1]) {
+            tanFSG = fg / resaultAgfo[1];
             fsg = Math.toDegrees(Math.atan(tanFSG));// искомый угол поворота
             angl = tiltAngle(fsg, resaultAgfo[1], go);
-            resaultAgfo[1] = fo;
+            resaultAgfo[0] = fo;
             resaultAgfo[2] = fsg;
             resaultAgfo[3] = angl;
             resaultAgfo[4] = maxh;
@@ -177,13 +177,13 @@ public class GeomСalculations {
         fo = oj - fj;//return this is x, one of coordinats
         double maxh = findingMaxH(cornerSize, fo);
         fr = rj / Math.cos(Math.toRadians(frj));
-        resaultOfjb = srfUniversal(fr, tiltAngleInDegrees);//resault {FS,0,0,0,0,0,RS}
-        if (maxh > resaultOfjb[0]) {
-            tanJSF = fj / resaultOfjb[0];
+        resaultOfjb = srfUniversal(fr, tiltAngleInDegrees);//resault {0,FS,0,0,0,0,RS}
+        if (maxh > resaultOfjb[1]) {
+            tanJSF = fj / resaultOfjb[1];
             jsf = Math.toDegrees(Math.atan(tanJSF));
             ksj = 270 - jsf;// искомый угол поворота
             angl = tiltAngle(jsf, resaultOfjb[1], rj);
-            resaultOfjb[1] = fo;
+            resaultOfjb[0] = fo;
             resaultOfjb[2] = ksj;
             resaultOfjb[3] = angl;
             resaultOfjb[4] = maxh;
@@ -208,13 +208,13 @@ public class GeomСalculations {
         fo = oj + jf;//return this is x, one of coordinats
         double maxh = findingMaxH(cornerSize, fo);
         fr = rj / Math.cos(Math.toRadians(jrf));
-        resaultOjfb = srfUniversal(fr, tiltAngleInDegrees);//resault {FS,0,0,0,0,0,RS}
-        if (maxh > resaultOjfb[0]) {
-            tanFSJ = jf / resaultOjfb[0];
+        resaultOjfb = srfUniversal(fr, tiltAngleInDegrees);//resault {0,FS,0,0,0,0,RS}
+        if (maxh > resaultOjfb[1]) {
+            tanFSJ = jf / resaultOjfb[1];
             fsj = Math.toDegrees(Math.atan(tanFSJ));
             ksj = 270 + fsj;// искомый угол поворота
             angl = tiltAngle(fsj, resaultOjfb[1], rj);
-            resaultOjfb[1] = fo;
+            resaultOjfb[0] = fo;
             resaultOjfb[2] = ksj;
             resaultOjfb[3] = angl;
             resaultOjfb[4] = maxh;
