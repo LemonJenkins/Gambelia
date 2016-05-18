@@ -4,6 +4,6 @@ public class Main {
 
         GeomСalculations Ray = new GeomСalculations();
         Ray.start();
-
+        //Ray.test();
     }
 }
